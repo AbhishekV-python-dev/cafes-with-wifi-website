@@ -1,12 +1,34 @@
 from flask import Flask, render_template, request, redirect, url_for
+from sqlalchemy import create_engine, Column, Integer, String, Text
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 import requests
-from database_setup import SessionLocal, Contact
 
 app = Flask(__name__)
 
 # OpenStreetMap Nominatim API URL
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+
+# Database Configuration
+Base = declarative_base()
+
+class Contact(Base):
+    __tablename__ = "contacts"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(100), nullable=False)
+    email = Column(String(150), nullable=False)
+    subject = Column(String(200), nullable=False)
+    message = Column(Text, nullable=False)
+
+    def __repr__(self):
+        return f"<Contact(name={self.name}, email={self.email}, subject={self.subject})>"
+
+# SQLite Database connection string
+DATABASE_URL = "sqlite:///contacts.db"
+engine = create_engine(DATABASE_URL, echo=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base.metadata.create_all(bind=engine)  # Create tables if they don't exist
 
 @app.route("/")
 def home():
@@ -74,4 +96,4 @@ def contact():
     return render_template("contact.html")
 
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=8080)
