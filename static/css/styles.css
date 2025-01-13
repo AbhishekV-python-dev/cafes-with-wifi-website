@@ -1,0 +1,234 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Navbar: Make background semi-transparent */
+  .navbar {
+    background: rgba(0, 0, 0, 0.6); /* Transparent navbar */
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Navbar Hover Effect */
+  .navbar:hover {
+    background-color: #343a40;
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-brand:hover {
+    color: #ff7f50;
+  }
+  
+  .navbar-nav .nav-link {
+    font-size: 18px;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #ff7f50;
+  }
+  
+  /* Hero Section: Lighten the overlay to make the image more visible */
+  .hero-section .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Lightened overlay */
+  }
+  
+  .hero-text {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .hero-text .btn {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .hero-text .btn:hover {
+    background-color: #ff7f50;
+    transform: scale(1.1);
+  }
+  
+  /* Hover Effect on Cards */
+  .card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card-body {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .card-body:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .card-title {
+    transition: color 0.3s ease;
+  }
+  
+  .card-title:hover {
+    color: #ff7f50;
+  }
+  
+  .card-img-top {
+    transition: transform 0.3s ease;
+  }
+  
+  .card-img-top:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Cafe Text Hover Effect */
+  .card-text {
+    transition: color 0.3s ease;
+  }
+  
+  .card-text:hover {
+    color: #ff7f50;
+  }
+  
+  /* Search Bar Hover Effect */
+  .form-control {
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-control:hover {
+    border-color: #ff7f50;
+  }
+  
+  .btn-success:hover {
+    background-color: #ff7f50;
+    border-color: #ff7f50;
+  }
+  
+  /* Footer: Make background semi-transparent */
+  footer {
+    background: rgba(0, 0, 0, 0.7); /* Transparent footer */
+    color: white;
+    transition: background-color 0.3s ease;
+    padding-top: 50px;
+    padding-bottom: 30px;
+  }
+  
+  footer:hover {
+    background-color: #23272b;
+  }
+  
+  footer h5 {
+    color: #ff7f50; /* Accent color for heading */
+    transition: color 0.3s ease;
+  }
+  
+  footer h5:hover {
+    color: #ffcc99; /* Change heading color when hovered */
+  }
+  
+  footer .text-muted {
+    font-size: 0.875rem; /* Smaller text for better readability */
+    transition: color 0.3s ease;
+  }
+  
+  footer .text-muted.small {
+    font-size: 0.75rem; /* Even smaller for copyright */
+  }
+  
+  footer .text-white {
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  footer .text-white:hover {
+    color: #ff7f50;
+  }
+  
+  footer .list-unstyled li {
+    margin-bottom: 8px;
+    transition: transform 0.3s ease;
+  }
+  
+  footer .list-unstyled li:hover {
+    transform: translateX(5px); /* Slight right shift on hover */
+  }
+  
+  /* Icon styling */
+  footer .bi {
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+  }
+  
+  footer .bi:hover {
+    color: #ff7f50; /* Change icon color to accent color on hover */
+  }
+  
+  footer .text-muted {
+    color: #dcdcdc !important; /* Lighten muted text for better contrast */
+  }
+  
+  footer .text-white {
+    color: #ffffff !important; /* Ensure white text visibility */
+  }
+  
+  /* Responsive behavior */
+  @media (max-width: 768px) {
+    footer .col-md-6 {
+      text-align: center; /* Align text to center on smaller screens */
+    }
+  }
+  /* Carousel Indicators (Dots) Position */
+.carousel-indicators {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+  
+  /* Style the carousel dots */
+  .carousel-indicators button {
+    background-color: rgba(255, 255, 255, 0.5); /* Light color for dots */
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    opacity: 1;
+  }
+  
+  .carousel-indicators .active {
+    background-color: #28a745; /* Green color for active dot */
+  }
+  
+  /* Adjust the transition effect for carousel */
+  .carousel-item {
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  /* Optional: Carousel control buttons */
+  .carousel-control-prev, .carousel-control-next {
+    z-index: 5;
+    opacity: 0.8;  /* Slight transparency for visibility */
+  }
+  
+  .carousel-control-prev-icon, .carousel-control-next-icon {
+    background-color: #000; /* Dark icons for visibility */
+  }
+  
