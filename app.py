@@ -1,10 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for
 from sqlalchemy import create_engine, Column, Integer, String, Text
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 import requests
+import os
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'default-dev-key')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///contacts.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # OpenStreetMap Nominatim API URL
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
@@ -25,8 +29,10 @@ class Contact(Base):
         return f"<Contact(name={self.name}, email={self.email}, subject={self.subject})>"
 
 # SQLite Database connection string
-DATABASE_URL = "sqlite:///contacts.db"
-engine = create_engine(DATABASE_URL, echo=True)
+# SQLite Database connection string
+DATABASE_URL = "sqlite:///contacts.db" # Keep for local dev if env var not set, though app.config is preferred for Flask-SQLAlchemy if used
+# But here we are using raw SQLAlchemy engine
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], echo=app.config.get('DEBUG', False))
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base.metadata.create_all(bind=engine)  # Create tables if they don't exist
 
@@ -51,7 +57,10 @@ def search():
         "addressdetails": 1,
         "limit": 1
     }
-    location_response = requests.get(NOMINATIM_URL, params=location_params)
+    try:
+        location_response = requests.get(NOMINATIM_URL, params=location_params, timeout=10)
+    except requests.RequestException as e:
+         return render_template("index.html", error="Error connecting to location service.")
     if location_response.status_code != 200 or not location_response.json():
         return render_template("index.html", error="Location not found. Please try again.")
 
@@ -66,8 +75,11 @@ def search():
       (around:2000,{lat},{lon});
     out;
     """
-    cafe_response = requests.get(OVERPASS_URL, params={"data": overpass_query})
-    cafes = cafe_response.json()["elements"] if cafe_response.status_code == 200 else []
+    try:
+        cafe_response = requests.get(OVERPASS_URL, params={"data": overpass_query}, timeout=20)
+        cafes = cafe_response.json()["elements"] if cafe_response.status_code == 200 else []
+    except requests.RequestException:
+        cafes = []
 
     return render_template("index.html", location=location_query, cafes=cafes, lat=lat, lon=lon)
 
@@ -89,11 +101,12 @@ def contact():
             return render_template("contact.html", success=True)
         except Exception as e:
             session.rollback()
-            session.close()
             print(f"Error: {e}")
             return render_template("contact.html", success=False)
+        finally:
+            session.close()
 
     return render_template("contact.html")
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8080)
+    app.run(debug=os.environ.get('DEBUG', 'False') == 'True', host="0.0.0.0", port=8080)
